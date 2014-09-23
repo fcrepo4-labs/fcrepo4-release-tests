@@ -348,7 +348,18 @@
   </profiles>
 
   <repositories>
-      <repository>
+    <repository>
+      <id>snapshots-repo</id>
+      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+
+    <repository>
           <id>apache</id>
           <name>Apache repository</name>
           <url>http://repository.apache.org/content/repositories/releases/</url>
@@ -359,5 +370,6 @@
               <enabled>false</enabled>
           </snapshots>
       </repository>
+
   </repositories>
 </project>

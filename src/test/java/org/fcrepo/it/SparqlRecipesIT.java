@@ -34,6 +34,7 @@ import static java.lang.Integer.MAX_VALUE;
  * https://wiki.duraspace.org/display/FF/SPARQL+Recipes
  *
  * @author Mike Durbin
+ * @since Sep 19, 2014
  */
 public class SparqlRecipesIT {
 
