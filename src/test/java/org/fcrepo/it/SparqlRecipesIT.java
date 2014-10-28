@@ -33,6 +33,7 @@ import static java.lang.Integer.MAX_VALUE;
  * The tests mirror the manual tests described on the Fedora 4 wiki.
  * https://wiki.duraspace.org/display/FF/SPARQL+Recipes
  *
+ * @author lsitu
  * @author Mike Durbin
  * @since Sep 19, 2014
  */
@@ -44,12 +45,12 @@ public class SparqlRecipesIT {
     private static String CARGO_PORT = System.getProperty("cargo.port");
 
     private static short FCREPO_SNAPSHOT_NUMBER = 4;
-    protected static String DATASTREAM_URL_SUFIX = "/fcr:metadata";
-    protected static String DATASTREAM_CONTENT_URL_SUFIX = "";
+    private static String DATASTREAM_URL_SUFIX = "/fcr:metadata";
+    private static String DATASTREAM_CONTENT_URL_SUFIX = "";
 
-    protected static HttpClient client = createClient();
+    private static HttpClient client = createClient();
 
-    protected static HttpClient createClient() {
+    private static HttpClient createClient() {
         return HttpClientBuilder.create().setMaxConnPerRoute(MAX_VALUE)
                 .setMaxConnTotal(MAX_VALUE).build();
     }
