@@ -43,6 +43,10 @@ public class SparqlRecipesIT {
 
     private static String CARGO_PORT = System.getProperty("cargo.port");
 
+    private static short FCREPO_SNAPSHOT_NUMBER = 4;
+    protected static String DATASTREAM_URL_SUFIX = "/fcr:metadata";
+    protected static String DATASTREAM_CONTENT_URL_SUFIX = "";
+
     protected static HttpClient client = createClient();
 
     protected static HttpClient createClient() {
@@ -54,8 +58,29 @@ public class SparqlRecipesIT {
 
     @BeforeClass
     public static void startFuseki() throws InterruptedException, IOException {
-        File commandFile = new File("target/jena-fuseki-1.0.1/fuseki-server");
-        ProcessBuilder b = new ProcessBuilder().inheritIO()
+
+        //Determine the snapshot used for testing and its REST api,
+        //make it default for snapshot 4 for the current version
+        final String fcrepoSnapshot = System.getProperty("fcrepo.version");
+        if (fcrepoSnapshot != null
+                && fcrepoSnapshot.indexOf("-") > 0
+                && fcrepoSnapshot.indexOf("4.0.0-beta") >= 0) {
+            final String[] verTokens = fcrepoSnapshot.split("-");
+            if (verTokens.length >= 3) {
+                try {
+                     FCREPO_SNAPSHOT_NUMBER = Short.parseShort(verTokens[2]);
+                } catch (final NumberFormatException ne) {
+                    FCREPO_SNAPSHOT_NUMBER = 4;
+                }
+            }
+        }
+        if (FCREPO_SNAPSHOT_NUMBER < 4) {
+            DATASTREAM_URL_SUFIX = "";
+            DATASTREAM_CONTENT_URL_SUFIX = "/fcr:content";
+        }
+
+        final File commandFile = new File("target/jena-fuseki-1.0.1/fuseki-server");
+        final ProcessBuilder b = new ProcessBuilder().inheritIO()
                 .directory(commandFile.getParentFile())
                 .command("./fuseki-server", "--update", "--mem", "/test" );
         fuseki = b.start();
@@ -105,16 +130,20 @@ public class SparqlRecipesIT {
         System.out.println("Adding test objects...");
         putObject(pid101);
         markAsIndexable(pid101);
-        putDummyDatastream(pid101 + "/master/fcr:content", "application/pdf");
+        putDummyDatastream(pid101 + "/master" + DATASTREAM_CONTENT_URL_SUFIX, "application/pdf");
+        markAsIndexable(pid101 + "/master" + DATASTREAM_URL_SUFIX);
 
         putObject(pid102);
         markAsIndexable(pid102);
-        putDummyDatastream(pid102 + "/master/fcr:content", "text/plain");
+        putDummyDatastream(pid102 + "/master" + DATASTREAM_CONTENT_URL_SUFIX, "text/plain");
+        markAsIndexable(pid102 + "/master" + DATASTREAM_URL_SUFIX);
 
         putObject(pid103);
         markAsIndexable(pid103);
-        putDummyDatastream(pid103 + "/master/fcr:content", "application/pdf");
-        putDummyDatastream(pid103 + "/text/fcr:content", "text/plain");
+        putDummyDatastream(pid103 + "/master" + DATASTREAM_CONTENT_URL_SUFIX, "application/pdf");
+        putDummyDatastream(pid103 + "/text" + DATASTREAM_CONTENT_URL_SUFIX, "text/plain");
+        markAsIndexable(pid103 + "/text" + DATASTREAM_URL_SUFIX);
+        markAsIndexable(pid103 + "/master" + DATASTREAM_URL_SUFIX);
 
         putObject(pid201);
         markAsIndexable(pid201);
@@ -158,7 +187,7 @@ public class SparqlRecipesIT {
                 "select ?object where { \n" +
                 "    ?ds fcrepo:mixinTypes \"fedora:datastream\" .\n" +
                 "    ?ds fcrepo:hasParent ?object . \n" +
-                "    filter(str(?ds)=concat(str(?object),'/text')) \n" +
+                "    filter(str(?ds)=concat(str(?object),'/text" + DATASTREAM_URL_SUFIX + "')) \n" +
                 "}";
         final ByteArrayOutputStream response1b = new ByteArrayOutputStream();
         queryFuseki(fusekiQuery1b).getEntity().writeTo(response1b);
@@ -324,11 +353,11 @@ public class SparqlRecipesIT {
         final private List<List<String>> rows;
 
         public FusekiResponse(final String csvResponse) {
-            String[] rowArray = csvResponse.split("\\n");
+            final String[] rowArray = csvResponse.split("\\n");
             this.rows = new ArrayList<List<String>>();
-            for (String row : rowArray) {
-                ArrayList<String> rowList = new ArrayList<String>();
-                for (String cell : row.split(",")) {
+            for (final String row : rowArray) {
+                final ArrayList<String> rowList = new ArrayList<String>();
+                for (final String cell : row.split(",")) {
                     rowList.add(cell.trim());
                 }
                 this.rows.add(rowList);
