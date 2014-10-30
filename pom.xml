@@ -48,10 +48,6 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <fcrepo.version>${project.version}</fcrepo.version>
     <httpclient.version>4.3.3</httpclient.version>
-    <!-- Trick that works for setting the default ports for Cargo and Fuseki? -->
-    <test.port>8080</test.port>
-    <fuseki.port>3030</fuseki.port>
-    <fuseki.mgt.port>3031</fuseki.mgt.port>
   </properties>
 
   <build>
@@ -120,6 +116,29 @@
             </executions>
 
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>reserve-network-port</id>
+              <goals>
+                <goal>reserve-network-port</goal>
+              </goals>
+              <phase>process-test-resources</phase>
+              <configuration>
+                <portNames>
+          	      <!-- reserve ports for integration tests -->
+                  <portName>test.port</portName>
+                  <portName>fuseki.mgt.port</portName>
+                  <portName>fuseki.port</portName> 
+                  <portName>jms.port</portName>
+                  <portName>stomp.port</portName>    
+                </portNames>
+              </configuration>
+           </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
@@ -129,6 +148,9 @@
             <test.port>${test.port}</test.port>
             <fuseki.mgt.port>${fuseki.mgt.port}</fuseki.mgt.port>
             <fuseki.port>${fuseki.port}</fuseki.port>
+            <jms.port>${jms.port}</jms.port>
+            <stomp.port>${stomp.port}</stomp.port>
+            <integration-test>true</integration-test>
           </systemPropertyVariables>
         </configuration>
         <executions>
@@ -149,14 +171,6 @@
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
         <artifactId>cargo-maven2-plugin</artifactId>
-        <!-- reserve ports for integration tests -->
-        <configuration>
-          <portNames>
-            <portName>test.port</portName>
-            <portName>fuseki.mgt.port</portName>
-            <portName>fuseki.port</portName>
-          </portNames>      
-        </configuration>
         <executions>
           <execution>
             <id>start-cargo</id>
@@ -199,6 +213,8 @@
                   </artifactInstaller>
                   <systemProperties>
                     <fuseki.port>${fuseki.port}</fuseki.port>
+                    <jms.port>${jms.port}</jms.port>
+            		<stomp.port>${stomp.port}</stomp.port>
                   </systemProperties>
                 </container>
               </configuration>
@@ -221,6 +237,8 @@
                   <type>embedded</type>
        			  <systemProperties>
                     <fuseki.port>${fuseki.port}</fuseki.port>
+                    <jms.port>${jms.port}</jms.port>
+            		<stomp.port>${stomp.port}</stomp.port>
                   </systemProperties>
                 </container>
               </configuration>
