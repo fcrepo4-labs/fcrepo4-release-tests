@@ -46,9 +46,12 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <cargo.port>8080</cargo.port>
     <fcrepo.version>${project.version}</fcrepo.version>
     <httpclient.version>4.3.3</httpclient.version>
+    <!-- Trick that works for setting the default ports for Cargo and Fuseki? -->
+    <test.port>8080</test.port>
+    <fuseki.port>3030</fuseki.port>
+    <fuseki.mgt.port>3031</fuseki.mgt.port>
   </properties>
 
   <build>
@@ -66,7 +69,7 @@
           <configuration>
             <configuration>
               <properties>
-                <cargo.servlet.port>${cargo.port}</cargo.servlet.port>
+                <cargo.servlet.port>${test.port}</cargo.servlet.port>
               </properties>
             </configuration>
               <deployables>
@@ -120,17 +123,20 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <!-- export ports for integration tests to system.env-->
+          <systemPropertyVariables>
+            <test.port>${test.port}</test.port>
+            <fuseki.mgt.port>${fuseki.mgt.port}</fuseki.mgt.port>
+            <fuseki.port>${fuseki.port}</fuseki.port>
+          </systemPropertyVariables>
+        </configuration>
         <executions>
           <execution>
             <id>perform-it</id>
             <goals>
               <goal>integration-test</goal>
             </goals>
-            <configuration>
-              <systemPropertyVariables>
-                  <cargo.port>${cargo.port}</cargo.port>
-              </systemPropertyVariables>
-            </configuration>
           </execution>
           <execution>
             <id>verify-it</id>
@@ -143,6 +149,14 @@
       <plugin>
         <groupId>org.codehaus.cargo</groupId>
         <artifactId>cargo-maven2-plugin</artifactId>
+        <!-- reserve ports for integration tests -->
+        <configuration>
+          <portNames>
+            <portName>test.port</portName>
+            <portName>fuseki.mgt.port</portName>
+            <portName>fuseki.port</portName>
+          </portNames>      
+        </configuration>
         <executions>
           <execution>
             <id>start-cargo</id>
@@ -183,6 +197,9 @@
                     <artifactId>jetty-distribution</artifactId>
                     <version>7.6.15.v20140411</version>
                   </artifactInstaller>
+                  <systemProperties>
+                    <fuseki.port>${fuseki.port}</fuseki.port>
+                  </systemProperties>
                 </container>
               </configuration>
             </plugin>
@@ -202,6 +219,9 @@
                 <container>
                   <containerId>jetty6x</containerId>
                   <type>embedded</type>
+       			  <systemProperties>
+                    <fuseki.port>${fuseki.port}</fuseki.port>
+                  </systemProperties>
                 </container>
               </configuration>
             </plugin>

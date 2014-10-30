@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
@@ -22,6 +23,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import static java.lang.System.getProperty;
+import static java.lang.Integer.parseInt;
 import static java.lang.Integer.MAX_VALUE;
 
 /**
@@ -42,7 +45,10 @@ public class SparqlRecipesIT {
     public static String FEDORA_CONTEXT = "fcrepo-webapp";
     public static String CONSUMER_CONTEXT = "fcrepo-message-consumer";
 
-    private static String CARGO_PORT = System.getProperty("cargo.port");
+    private static String CARGO_PORT = System.getProperty("test.port", "8080");
+    private static final int FUSEKI_PORT = parseInt(getProperty("fuseki.port", "3030"));
+    private static final int MGT_PORT = parseInt(getProperty("fuseki.mgt.port", "3031"));
+    private static final String serverAddress = "http://localhost:" + MGT_PORT + "/mgt";
 
     private static short FCREPO_SNAPSHOT_NUMBER = 4;
     private static String DATASTREAM_URL_SUFIX = "/fcr:metadata";
@@ -83,7 +89,8 @@ public class SparqlRecipesIT {
         final File commandFile = new File("target/jena-fuseki-1.0.1/fuseki-server");
         final ProcessBuilder b = new ProcessBuilder().inheritIO()
                 .directory(commandFile.getParentFile())
-                .command("./fuseki-server", "--update", "--mem", "/test" );
+                .command("./fuseki-server", "--update", "--mem", "--port=" + FUSEKI_PORT,
+                        "--mgtPort=" + MGT_PORT, "/test" );
         fuseki = b.start();
 
         // It might take a while to startup and be ready to receive messages...
@@ -94,6 +101,12 @@ public class SparqlRecipesIT {
 
     @AfterClass
     public static void stopFuseki() throws InterruptedException {
+        final HttpPost method = new HttpPost(serverAddress + "?cmd=shutdown");
+        try {
+            client.execute(method);
+        } catch (final IOException e) {
+            // do nothing
+        }
         fuseki.destroy();
     }
 
@@ -346,7 +359,7 @@ public class SparqlRecipesIT {
     }
 
     private static HttpResponse queryFuseki(String query) throws IOException {
-        final String queryUrl = "http://localhost:3030/test/query?query=" + URLEncoder.encode(query) + "&default-graph-uri=&output=csv&stylesheet=";
+        final String queryUrl = getFusekiBaseUrl() + "/test/query?query=" + URLEncoder.encode(query) + "&default-graph-uri=&output=csv&stylesheet=";
         return client.execute(new HttpGet(queryUrl));
     }
 
@@ -394,7 +407,7 @@ public class SparqlRecipesIT {
     }
 
     private static String getFusekiBaseUrl() {
-        return "http://localhost:3030";
+        return "http://localhost:" + FUSEKI_PORT;
     }
 
     private static String getConsumerBaseUrl() {
