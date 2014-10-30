@@ -46,7 +46,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <cargo.port>8080</cargo.port>
     <fcrepo.version>${project.version}</fcrepo.version>
     <httpclient.version>4.3.3</httpclient.version>
   </properties>
@@ -66,7 +65,7 @@
           <configuration>
             <configuration>
               <properties>
-                <cargo.servlet.port>${cargo.port}</cargo.servlet.port>
+                <cargo.servlet.port>${test.port}</cargo.servlet.port>
               </properties>
             </configuration>
               <deployables>
@@ -117,20 +116,49 @@
             </executions>
 
         </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>reserve-network-port</id>
+              <goals>
+                <goal>reserve-network-port</goal>
+              </goals>
+              <phase>process-test-resources</phase>
+              <configuration>
+                <portNames>
+          	      <!-- reserve ports for integration tests -->
+                  <portName>test.port</portName>
+                  <portName>fuseki.mgt.port</portName>
+                  <portName>fuseki.port</portName> 
+                  <portName>jms.port</portName>
+                  <portName>stomp.port</portName>    
+                </portNames>
+              </configuration>
+           </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
+        <configuration>
+          <!-- export ports for integration tests to system.env-->
+          <systemPropertyVariables>
+            <test.port>${test.port}</test.port>
+            <fuseki.mgt.port>${fuseki.mgt.port}</fuseki.mgt.port>
+            <fuseki.port>${fuseki.port}</fuseki.port>
+            <jms.port>${jms.port}</jms.port>
+            <stomp.port>${stomp.port}</stomp.port>
+            <integration-test>true</integration-test>
+          </systemPropertyVariables>
+        </configuration>
         <executions>
           <execution>
             <id>perform-it</id>
             <goals>
               <goal>integration-test</goal>
             </goals>
-            <configuration>
-              <systemPropertyVariables>
-                  <cargo.port>${cargo.port}</cargo.port>
-              </systemPropertyVariables>
-            </configuration>
           </execution>
           <execution>
             <id>verify-it</id>
@@ -183,6 +211,11 @@
                     <artifactId>jetty-distribution</artifactId>
                     <version>7.6.15.v20140411</version>
                   </artifactInstaller>
+                  <systemProperties>
+                    <fuseki.port>${fuseki.port}</fuseki.port>
+                    <jms.port>${jms.port}</jms.port>
+            		<stomp.port>${stomp.port}</stomp.port>
+                  </systemProperties>
                 </container>
               </configuration>
             </plugin>
@@ -202,6 +235,11 @@
                 <container>
                   <containerId>jetty6x</containerId>
                   <type>embedded</type>
+       			  <systemProperties>
+                    <fuseki.port>${fuseki.port}</fuseki.port>
+                    <jms.port>${jms.port}</jms.port>
+            		<stomp.port>${stomp.port}</stomp.port>
+                  </systemProperties>
                 </container>
               </configuration>
             </plugin>
