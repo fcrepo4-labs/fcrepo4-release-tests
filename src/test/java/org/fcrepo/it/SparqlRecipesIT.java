@@ -47,6 +47,8 @@ public class SparqlRecipesIT {
     private static short FCREPO_SNAPSHOT_NUMBER = 4;
     private static String DATASTREAM_URL_SUFIX = "/fcr:metadata";
     private static String DATASTREAM_CONTENT_URL_SUFIX = "";
+    private static String DATASTREAM_MIXIN_TYPE = "fedora:NonRdfSourceDescription";
+    private static String DATASTREAM_RELATION = "<http://www.iana.org/assignments/relation/describes>";
 
     private static HttpClient client = createClient();
 
@@ -78,6 +80,8 @@ public class SparqlRecipesIT {
         if (FCREPO_SNAPSHOT_NUMBER < 4) {
             DATASTREAM_URL_SUFIX = "";
             DATASTREAM_CONTENT_URL_SUFIX = "/fcr:content";
+            DATASTREAM_MIXIN_TYPE = "fedora:datastream";
+            DATASTREAM_RELATION = "fcrepo:hasContent";
         }
 
         final File commandFile = new File("target/jena-fuseki-1.0.1/fuseki-server");
@@ -186,7 +190,7 @@ public class SparqlRecipesIT {
     public void testSparqlQueries1() throws IOException, InterruptedException {
         final String fusekiQuery1b = "prefix fcrepo: <http://fedora.info/definitions/v4/repository#>\n" +
                 "select ?object where { \n" +
-                "    ?ds fcrepo:mixinTypes \"fedora:datastream\" .\n" +
+                "    ?ds fcrepo:mixinTypes \"" + DATASTREAM_MIXIN_TYPE + "\" .\n" +
                 "    ?ds fcrepo:hasParent ?object . \n" +
                 "    filter(str(?ds)=concat(str(?object),'/text" + DATASTREAM_URL_SUFIX + "')) \n" +
                 "}";
@@ -197,9 +201,9 @@ public class SparqlRecipesIT {
 
         final String fusekiQuery1c = "prefix fcrepo: <http://fedora.info/definitions/v4/repository#>\n" +
                 "select ?object where { \n" +
-                "    ?ds fcrepo:mixinTypes \"fedora:datastream\" .\n" +
+                "    ?ds fcrepo:mixinTypes \"" + DATASTREAM_MIXIN_TYPE + "\" .\n" +
                 "    ?ds fcrepo:hasParent ?object . \n" +
-                "    ?ds fcrepo:hasContent ?content .\n" +
+                "    ?ds " + DATASTREAM_RELATION + " ?content .\n" +
                 "    ?content fcrepo:mimeType \"application/pdf\" \n" +
                 "}";
         final ByteArrayOutputStream response1c = new ByteArrayOutputStream();
