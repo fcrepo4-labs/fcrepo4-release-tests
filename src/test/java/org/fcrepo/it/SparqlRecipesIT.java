@@ -1,3 +1,18 @@
+/**
+ * Copyright 2014 DuraSpace, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.fcrepo.it;
 
 import org.apache.http.HttpResponse;
@@ -291,7 +306,7 @@ public class SparqlRecipesIT {
                new FusekiResponse(new String(response3h.toByteArray()).trim()).getValues("count"));
     }
 
-    private static String getURIForPid(String pid) {
+    private static String getURIForPid(final String pid) {
         return getFedoraBaseUrl() + "/rest/" + pid;
     }
 
@@ -303,25 +318,25 @@ public class SparqlRecipesIT {
         }
     }
 
-    private static void putObject(String pid) throws IOException {
+    private static void putObject(final String pid) throws IOException {
         Assert.assertEquals(201, getStatusCode(new HttpPut(getURIForPid(pid))));
     }
 
-    private static void putDummyDatastream(String path, String mimeType) throws IOException {
+    private static void putDummyDatastream(final String path, final String mimeType) throws IOException {
         final HttpPut put = new HttpPut(getURIForPid(path));
         put.setHeader("Content-type", mimeType);
         put.setEntity(new StringEntity("garbage"));
         Assert.assertEquals(201, getStatusCode(put));
     }
 
-    private static void updateProperties(String pid, String sparql) throws IOException {
+    private static void updateProperties(final String pid, final String sparql) throws IOException {
         final HttpPatch patch = new HttpPatch(getURIForPid(pid));
         patch.setHeader("Content-type", "application/sparql-update");
         patch.setEntity(new StringEntity(sparql));
         Assert.assertEquals(204, getStatusCode(patch));
     }
 
-    private static void markAsIndexable(String pid) throws IOException {
+    private static void markAsIndexable(final String pid) throws IOException {
         final String sparqlUpdate = "PREFIX dc: <http://purl.org/dc/elements/1.1/>\n" +
                 "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
                 "PREFIX indexing: <http://fedora.info/definitions/v4/indexing#>\n" +
@@ -333,27 +348,28 @@ public class SparqlRecipesIT {
         updateProperties(pid, sparqlUpdate);
     }
 
-    private static void setTitle(String pid, String title) throws IOException {
+    private static void setTitle(final String pid, final String title) throws IOException {
         final String sparqlUpdate = "prefix dc: <http://purl.org/dc/elements/1.1/>" +
                 " insert data { <" + getURIForPid(pid) + "> dc:title '" + title + "' . }";
         updateProperties(pid, sparqlUpdate);
     }
 
-    private static void insertIntoCollection(String pid, String collectionPid) throws IOException {
+    private static void insertIntoCollection(final String pid, final String collectionPid) throws IOException {
         final String sparqlUpdate = "insert data { <" + getURIForPid(pid) + ">" +
                 " <http://fedora.info/definitions/v4/rels-ext#isMemberOfCollection>" +
                 " <" + getURIForPid(collectionPid) + "> . }";
         updateProperties(pid, sparqlUpdate);
     }
 
-    private static void linkHierarchicalCollections(String collectionPid, String partPid) throws IOException {
+    private static void linkHierarchicalCollections(final String collectionPid,
+                                                    final String partPid) throws IOException {
         final String sparqlUpdate = "insert data { <" + getURIForPid(collectionPid) + ">" +
                 " <http://fedora.info/definitions/v4/rels-ext#hasPart>" +
                 " <" + getURIForPid(partPid) + "> . }";
         updateProperties(collectionPid, sparqlUpdate);
     }
 
-    private static void linkToProject(String pid, String projectPid) throws IOException {
+    private static void linkToProject(final String pid, final String projectPid) throws IOException {
         final String sparqlUpdate = "prefix ex: <http://example.org/>" +
                 " insert data { <" + getURIForPid(pid) + ">" +
                 " ex:project" +
@@ -362,8 +378,9 @@ public class SparqlRecipesIT {
 
     }
 
-    private static HttpResponse queryFuseki(String query) throws IOException {
-        final String queryUrl = getFusekiBaseUrl() + "/test/query?query=" + URLEncoder.encode(query) + "&default-graph-uri=&output=csv&stylesheet=";
+    private static HttpResponse queryFuseki(final String query) throws IOException {
+        final String queryUrl = getFusekiBaseUrl() + "/test/query?query=" + URLEncoder.encode(query) +
+                "&default-graph-uri=&output=csv&stylesheet=";
         return client.execute(new HttpGet(queryUrl));
     }
 
@@ -382,7 +399,7 @@ public class SparqlRecipesIT {
             }
         }
 
-        public List<String> getValues(String header) {
+        public List<String> getValues(final String header) {
             final List<String> results = new ArrayList<String>();
             int columnIndex = -1;
             if (!rows.isEmpty()) {
