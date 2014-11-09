@@ -252,7 +252,7 @@ public class SparqlRecipesIT {
                 new HashSet(new FusekiResponse(new String(response2b.toByteArray()).trim()).getValues("title")));
 
         final String fusekiQuery3e = "select ?obj ?col where" +
-                " { ?obj <http://fedora.info/definitions/v4/rels-ext#isMemberOfCollection> ?col }";
+                " { ?obj <http://some-vocabulary.org/rels-ext#isMemberOfCollection> ?col }";
         final ByteArrayOutputStream response3e = new ByteArrayOutputStream();
         queryFuseki(fusekiQuery3e).getEntity().writeTo(response3e);
         final FusekiResponse table = new FusekiResponse(new String(response3e.toByteArray()));
@@ -263,7 +263,7 @@ public class SparqlRecipesIT {
         expected.add(Arrays.asList(new String[] {getURIForPid(pidObj3), getURIForPid(pidCol3)}));
         Assert.assertEquals(expected, new HashSet<List<String>>(table.rows));
 
-        final String fusekiQuery3f = "prefix rels: <http://fedora.info/definitions/v4/rels-ext#>\n" +
+        final String fusekiQuery3f = "prefix rels: <http://some-vocabulary.org/rels-ext#>\n" +
                 "select ?obj where {\n" +
                 "  <" + getURIForPid(pidCol1) + "> rels:hasPart* ?col\n" +
                 "  . ?obj rels:isMemberOfCollection ?col\n" +
@@ -277,7 +277,7 @@ public class SparqlRecipesIT {
 
     @Test
     public void testSparqlQueries3() throws IOException {
-        final String fusekiQuery3h = "prefix rels: <http://fedora.info/definitions/v4/rels-ext#>\n" +
+        final String fusekiQuery3h = "prefix rels: <http://some-vocabulary.org/rels-ext#>\n" +
                 "prefix ex: <http://example.org/>\n" +
                 "select ?obj where {\n" +
                 "  { ?obj ex:project <" + getURIForPid(pidProj1) + "> }\n" +
@@ -293,7 +293,7 @@ public class SparqlRecipesIT {
 
     @Test
     public void testCountObjectsLinkedToCollectionOrProject() throws IOException {
-        final String fusekiQuery3h = "prefix rels: <http://fedora.info/definitions/v4/rels-ext#>\n" +
+        final String fusekiQuery3h = "prefix rels: <http://some-vocabulary.org/rels-ext#>\n" +
                 "prefix ex: <http://example.org/>\n" +
                 "select (count(distinct ?obj) as ?count) where {\n" +
                 "  { ?obj ex:project <" + getURIForPid(pidProj1) + "> }\n" +
@@ -356,7 +356,7 @@ public class SparqlRecipesIT {
 
     private static void insertIntoCollection(final String pid, final String collectionPid) throws IOException {
         final String sparqlUpdate = "insert data { <" + getURIForPid(pid) + ">" +
-                " <http://fedora.info/definitions/v4/rels-ext#isMemberOfCollection>" +
+                " <http://some-vocabulary.org/rels-ext#isMemberOfCollection>" +
                 " <" + getURIForPid(collectionPid) + "> . }";
         updateProperties(pid, sparqlUpdate);
     }
@@ -364,7 +364,7 @@ public class SparqlRecipesIT {
     private static void linkHierarchicalCollections(final String collectionPid,
                                                     final String partPid) throws IOException {
         final String sparqlUpdate = "insert data { <" + getURIForPid(collectionPid) + ">" +
-                " <http://fedora.info/definitions/v4/rels-ext#hasPart>" +
+                " <http://some-vocabulary.org/rels-ext#hasPart>" +
                 " <" + getURIForPid(partPid) + "> . }";
         updateProperties(collectionPid, sparqlUpdate);
     }
