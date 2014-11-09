@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <parent>
     <groupId>org.fcrepo</groupId>
     <artifactId>fcrepo</artifactId>
-    <version>4.0.0-beta-04-SNAPSHOT</version>
+    <version>4.0.0-beta-04</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>release-tests</artifactId>
-  <version>4.0.0-beta-04-SNAPSHOT</version>
+  <version>4.0.0-beta-04</version>
   <packaging>jar</packaging>
   <name>Fedora 4 Pre-Release tests</name>
 
@@ -20,7 +19,7 @@
     <developerConnection>scm:git:git@github.com:fcrepo4-labs/${project_name}.git
     </developerConnection>
     <url>https://github.com/fcrepo4-labs/fcrepo4-release-tests</url>
-    <tag>fcrepo4-release-tests-4.0.0-beta-04</tag>
+    <tag>release-tests-4.0.0-beta-04</tag>
   </scm>
 
   <dependencies>
@@ -32,14 +31,14 @@
     <dependency>
         <groupId>org.fcrepo</groupId>
         <artifactId>fcrepo-webapp</artifactId>
-        <version>${fcrepo.version}</version>
+        <version>4.0.0-beta-04</version>
         <type>war</type>
         <scope>test</scope>
     </dependency>
       <dependency>
           <groupId>org.fcrepo</groupId>
           <artifactId>fcrepo-message-consumer-webapp</artifactId>
-          <version>${fcrepo.version}</version>
+          <version>4.0.0-beta-04</version>
           <type>war</type>
           <scope>test</scope>
       </dependency>
