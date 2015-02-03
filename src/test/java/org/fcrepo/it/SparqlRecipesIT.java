@@ -1,5 +1,5 @@
 /**
- * Copyright 2014 DuraSpace, Inc.
+ * Copyright 2015 DuraSpace, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -343,7 +343,7 @@ public class SparqlRecipesIT {
                 "DELETE { }\n" +
                 "INSERT {\n" +
                 "  <> indexing:hasIndexingTransformation \"default\";\n" +
-                "  rdf:type indexing:indexable }\n" +
+                "  rdf:type indexing:Indexable }\n" +
                 "WHERE { }";
         updateProperties(pid, sparqlUpdate);
     }
