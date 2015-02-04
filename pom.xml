@@ -19,7 +19,7 @@
     <developerConnection>scm:git:git@github.com:fcrepo4-labs/${project_name}.git
     </developerConnection>
     <url>https://github.com/fcrepo4-labs/fcrepo4-release-tests</url>
-    <tag>fcrepo4-release-tests-4.0.0-beta-04</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencies>
