@@ -4,12 +4,12 @@
   <parent>
     <groupId>org.fcrepo</groupId>
     <artifactId>fcrepo</artifactId>
-    <version>4.1.0</version>
+    <version>4.1.1-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>release-tests</artifactId>
-  <version>4.1.0</version>
+  <version>4.1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>Fedora 4 Pre-Release tests</name>
 
@@ -19,7 +19,7 @@
     <developerConnection>scm:git:git@github.com:fcrepo4-labs/${project_name}.git
     </developerConnection>
     <url>https://github.com/fcrepo4-labs/fcrepo4-release-tests</url>
-    <tag>release-tests-4.1.0</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencies>
@@ -45,14 +45,14 @@
     <dependency>
         <groupId>org.fcrepo</groupId>
         <artifactId>fcrepo-webapp</artifactId>
-        <version>4.1.0</version>
+        <version>4.1.1-SNAPSHOT</version>
         <type>war</type>
         <scope>test</scope>
     </dependency>
       <dependency>
           <groupId>org.fcrepo</groupId>
           <artifactId>fcrepo-message-consumer-webapp</artifactId>
-          <version>4.1.0</version>
+          <version>4.1.1-SNAPSHOT</version>
           <type>war</type>
           <scope>test</scope>
       </dependency>
