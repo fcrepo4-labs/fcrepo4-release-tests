@@ -103,7 +103,7 @@
           <configuration>
             <configuration>
               <properties>
-                <cargo.servlet.port>${test.port}</cargo.servlet.port>
+                <cargo.servlet.port>${fcrepo.dynamic.test.port}</cargo.servlet.port>
               </properties>
             </configuration>
               <deployables>
@@ -166,12 +166,11 @@
               <phase>process-test-resources</phase>
               <configuration>
                 <portNames>
-          	      <!-- reserve ports for integration tests -->
-                  <portName>test.port</portName>
-                  <portName>fuseki.mgt.port</portName>
-                  <portName>fuseki.port</portName> 
-                  <portName>jms.port</portName>
-                  <portName>stomp.port</portName>    
+                  <!-- reserve ports for integration tests -->
+                  <portName>fcrepo.dynamic.test.port</portName>
+                  <portName>fcrepo.dynamic.stomp.port</portName>
+                  <portName>fuseki.dynamic.mgt.port</portName>
+                  <portName>fuseki.dynamic.test.port</portName>
                 </portNames>
               </configuration>
            </execution>
@@ -183,11 +182,10 @@
         <configuration>
           <!-- export ports for integration tests to system.env-->
           <systemPropertyVariables>
-            <test.port>${test.port}</test.port>
-            <fuseki.mgt.port>${fuseki.mgt.port}</fuseki.mgt.port>
-            <fuseki.port>${fuseki.port}</fuseki.port>
-            <jms.port>${jms.port}</jms.port>
-            <stomp.port>${stomp.port}</stomp.port>
+            <fcrepo.dynamic.test.port>${fcrepo.dynamic.test.port}</fcrepo.dynamic.test.port>
+            <fcrepo.dynamic.stomp.port>${fcrepo.dynamic.stomp.port}</fcrepo.dynamic.stomp.port>
+            <fuseki.dynamic.mgt.port>${fuseki.dynamic.mgt.port}</fuseki.dynamic.mgt.port>
+            <fuseki.port>${fuseki.dynamic.test.port}</fuseki.port>
             <integration-test>true</integration-test>
           </systemPropertyVariables>
         </configuration>
@@ -250,9 +248,7 @@
                     <version>7.6.15.v20140411</version>
                   </artifactInstaller>
                   <systemProperties>
-                    <fuseki.port>${fuseki.port}</fuseki.port>
-                    <jms.port>${jms.port}</jms.port>
-            		<stomp.port>${stomp.port}</stomp.port>
+                    <fcrepo.dynamic.stomp.port>${fcrepo.dynamic.stomp.port}</fcrepo.dynamic.stomp.port>
                   </systemProperties>
                 </container>
               </configuration>
@@ -273,10 +269,8 @@
                 <container>
                   <containerId>jetty6x</containerId>
                   <type>embedded</type>
-       			  <systemProperties>
-                    <fuseki.port>${fuseki.port}</fuseki.port>
-                    <jms.port>${jms.port}</jms.port>
-            		<stomp.port>${stomp.port}</stomp.port>
+                  <systemProperties>
+                     <fcrepo.dynamic.stomp.port>${fcrepo.dynamic.stomp.port}</fcrepo.dynamic.stomp.port>
                   </systemProperties>
                 </container>
               </configuration>

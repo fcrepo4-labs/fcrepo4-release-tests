@@ -60,9 +60,9 @@ public class SparqlRecipesIT {
     public static String FEDORA_CONTEXT = "fcrepo-webapp";
     public static String CONSUMER_CONTEXT = "fcrepo-message-consumer";
 
-    private static String CARGO_PORT = System.getProperty("test.port", "8080");
-    private static final int FUSEKI_PORT = parseInt(getProperty("fuseki.port", "3030"));
-    private static final int MGT_PORT = parseInt(getProperty("fuseki.mgt.port", "3031"));
+    private static String CARGO_PORT = System.getProperty("fcrepo.dynamic.test.port", "8080");
+    private static final int FUSEKI_PORT = parseInt(getProperty("fuseki.dynamic.test.port", "3030"));
+    private static final int MGT_PORT = parseInt(getProperty("fuseki.dynamic.mgt.port", "3031"));
     private static final String serverAddress = "http://localhost:" + MGT_PORT + "/mgt";
 
     private static short FCREPO_SNAPSHOT_NUMBER = 4;
