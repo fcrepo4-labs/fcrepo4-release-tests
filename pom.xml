@@ -185,7 +185,7 @@
             <fcrepo.dynamic.test.port>${fcrepo.dynamic.test.port}</fcrepo.dynamic.test.port>
             <fcrepo.dynamic.stomp.port>${fcrepo.dynamic.stomp.port}</fcrepo.dynamic.stomp.port>
             <fuseki.dynamic.mgt.port>${fuseki.dynamic.mgt.port}</fuseki.dynamic.mgt.port>
-            <fuseki.port>${fuseki.dynamic.test.port}</fuseki.port>
+            <fuseki.dynamic.test.port>${fuseki.dynamic.test.port}</fuseki.dynamic.test.port>
             <integration-test>true</integration-test>
           </systemPropertyVariables>
         </configuration>
@@ -249,6 +249,7 @@
                   </artifactInstaller>
                   <systemProperties>
                     <fcrepo.dynamic.stomp.port>${fcrepo.dynamic.stomp.port}</fcrepo.dynamic.stomp.port>
+                    <fuseki.dynamic.test.port>${fuseki.dynamic.test.port}</fuseki.dynamic.test.port>
                   </systemProperties>
                 </container>
               </configuration>
@@ -271,6 +272,7 @@
                   <type>embedded</type>
                   <systemProperties>
                      <fcrepo.dynamic.stomp.port>${fcrepo.dynamic.stomp.port}</fcrepo.dynamic.stomp.port>
+                     <fuseki.dynamic.test.port>${fuseki.dynamic.test.port}</fuseki.dynamic.test.port>
                   </systemProperties>
                 </container>
               </configuration>
