@@ -167,6 +167,7 @@
               <configuration>
                 <portNames>
                   <!-- reserve ports for integration tests -->
+                  <portName>fcrepo.dynamic.jms.port</portName>
                   <portName>fcrepo.dynamic.test.port</portName>
                   <portName>fcrepo.dynamic.stomp.port</portName>
                   <portName>fuseki.dynamic.mgt.port</portName>
@@ -182,6 +183,7 @@
         <configuration>
           <!-- export ports for integration tests to system.env-->
           <systemPropertyVariables>
+            <fcrepo.dynamic.jms.port>${fcrepo.dynamic.jms.port}</fcrepo.dynamic.jms.port>
             <fcrepo.dynamic.test.port>${fcrepo.dynamic.test.port}</fcrepo.dynamic.test.port>
             <fcrepo.dynamic.stomp.port>${fcrepo.dynamic.stomp.port}</fcrepo.dynamic.stomp.port>
             <fuseki.dynamic.mgt.port>${fuseki.dynamic.mgt.port}</fuseki.dynamic.mgt.port>
@@ -248,6 +250,7 @@
                     <version>7.6.15.v20140411</version>
                   </artifactInstaller>
                   <systemProperties>
+                    <fcrepo.dynamic.jms.port>${fcrepo.dynamic.jms.port}</fcrepo.dynamic.jms.port>
                     <fcrepo.dynamic.stomp.port>${fcrepo.dynamic.stomp.port}</fcrepo.dynamic.stomp.port>
                     <fuseki.dynamic.test.port>${fuseki.dynamic.test.port}</fuseki.dynamic.test.port>
                   </systemProperties>
