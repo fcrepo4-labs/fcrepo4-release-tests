@@ -97,6 +97,11 @@
           <version>2.18.1</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.polugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>2.10.3</version>
+        </plugin>
+        <plugin>
           <groupId>org.codehaus.cargo</groupId>
           <artifactId>cargo-maven2-plugin</artifactId>
           <version>1.4.12</version>
