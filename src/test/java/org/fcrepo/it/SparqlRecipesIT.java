@@ -228,11 +228,12 @@ public class SparqlRecipesIT {
                 new FusekiResponse(new String(response1b.toByteArray()).trim()).getValues("object"));
 
         final String fusekiQuery1c = "prefix fcrepo: <http://fedora.info/definitions/v4/repository#>\n" +
+                "prefix ebucore: <http://www.ebu.ch/metadata/ontologies/ebucore/ebucore#>\n" +
                 "select ?object where { \n" +
                 "    ?ds fcrepo:mixinTypes \"" + DATASTREAM_MIXIN_TYPE + "\" .\n" +
                 "    ?ds fcrepo:hasParent ?object . \n" +
                 "    ?ds " + DATASTREAM_RELATION + " ?content .\n" +
-                "    ?content fcrepo:mimeType \"application/pdf\" \n" +
+                "    ?content ebucore:hasMimeType \"application/pdf\" \n" +
                 "}";
         final ByteArrayOutputStream response1c = new ByteArrayOutputStream();
         queryFuseki(fusekiQuery1c).getEntity().writeTo(response1c);
