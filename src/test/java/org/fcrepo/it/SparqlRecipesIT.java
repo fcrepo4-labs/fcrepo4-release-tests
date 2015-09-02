@@ -68,7 +68,7 @@ public class SparqlRecipesIT {
     private static short FCREPO_SNAPSHOT_NUMBER = 4;
     private static String DATASTREAM_URL_SUFIX = "/fcr:metadata";
     private static String DATASTREAM_CONTENT_URL_SUFIX = "";
-    private static String DATASTREAM_MIXIN_TYPE = "fedora:NonRdfSourceDescription";
+    private static String DATASTREAM_MIXIN_TYPE = "fedora:Binary";
     private static String DATASTREAM_RELATION = "<http://www.iana.org/assignments/relation/describes>";
 
     private static HttpClient client = createClient();
@@ -220,7 +220,7 @@ public class SparqlRecipesIT {
                 "select ?object where { \n" +
                 "    ?ds fcrepo:mixinTypes \"" + DATASTREAM_MIXIN_TYPE + "\" .\n" +
                 "    ?ds fcrepo:hasParent ?object . \n" +
-                "    filter(str(?ds)=concat(str(?object),'/text" + DATASTREAM_URL_SUFIX + "')) \n" +
+                "    filter(str(?ds)=concat(str(?object),'/text')) \n" +
                 "}";
         final ByteArrayOutputStream response1b = new ByteArrayOutputStream();
         queryFuseki(fusekiQuery1b).getEntity().writeTo(response1b);
@@ -232,8 +232,7 @@ public class SparqlRecipesIT {
                 "select ?object where { \n" +
                 "    ?ds fcrepo:mixinTypes \"" + DATASTREAM_MIXIN_TYPE + "\" .\n" +
                 "    ?ds fcrepo:hasParent ?object . \n" +
-                "    ?ds " + DATASTREAM_RELATION + " ?content .\n" +
-                "    ?content ebucore:hasMimeType \"application/pdf\" \n" +
+                "    ?ds ebucore:hasMimeType \"application/pdf\" \n" +
                 "}";
         final ByteArrayOutputStream response1c = new ByteArrayOutputStream();
         queryFuseki(fusekiQuery1c).getEntity().writeTo(response1c);
